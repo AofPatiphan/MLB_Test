@@ -10,13 +10,13 @@ function App() {
   const [data, setData] = useState(mockData);
   const [selectedValue, setSelectedValue] = useState({});
   const [gender, setGender] = useState([]);
-  const [country, setcountryender] = useState([]);
+  const [country, setcountry] = useState([]);
 
   useEffect(() => {
     const genderData = new Set(mockData.map((e) => e.gender));
     const countryData = new Set(mockData.map((e) => e.country));
     setGender([...genderData]);
-    setcountryender([...countryData]);
+    setcountry([...countryData]);
   }, []);
 
   useEffect(() => {
@@ -34,8 +34,11 @@ function App() {
   useEffect(() => {
     const country = _get(selectedValue, "country", "");
     const gender = _get(selectedValue, "gender", "");
+
     const selectedKeyword = Object.values(selectedValue);
+
     if (!country && !gender) return setData(mockData);
+
     if (country && gender) {
       return setData(
         mockData.filter((e) => {
@@ -46,6 +49,7 @@ function App() {
         })
       );
     }
+
     setData(
       mockData.filter((e) => {
         return (
@@ -57,9 +61,10 @@ function App() {
   }, [selectedValue]);
 
   const onClickFilterItems = (items, type) => {
-    const selected = {};
-    selected[type] = selectedValue[type] === items ? "" : items;
-    setSelectedValue({ ...selectedValue, ...selected });
+    setSelectedValue({
+      ...selectedValue,
+      [type]: selectedValue[type] === items ? "" : items,
+    });
   };
 
   const onClear = () => {
